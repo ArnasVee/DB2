@@ -1,0 +1,17 @@
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT 
+      [Savininkas]
+  FROM [SandboxSND].[dbo].[Automobiliai]
+  
+Where ValstybinisNumeris = 'HGB695'
+--WHERE	PagaminimoData = (SELECT MAX(PagaminimoData) FROM [SandboxSND].[dbo].[Automobiliai]);
+--WHERE PagaminimoData = (SELECT MIN(PagaminimoData) FROM [SandboxSND].[dbo].[Automobiliai]);
+
+
+Select top (1) [Savininkas]
+from Automobiliai
+order by (PagaminimoData) DESC
+
+Select top (1) [Savininkas]
+from Automobiliai
+order by (PagaminimoData) asc
