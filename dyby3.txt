@@ -1,0 +1,41 @@
+create database dogs
+create table sunys(
+[Id] int identity (1,1) primary key,
+[veisle] nvarchar(20) not null,
+[spalva] nvarchar(20) not null
+);
+
+select * from sunys
+
+insert into sunys (veisle, spalva)
+values ('kolis','ryza'),
+		('basetas','juoda'),
+		('dvarneska', 'ruda')
+
+ create unique index IX_Sunys_VeisleSpalva on sunys (veisle,spalva)
+
+ drop index sunys.IX_Sunys_VeisleSpalva
+
+-----------------------------------------------
+
+create table users(
+Id int Identity(1,1) primary key,
+[Name] nvarchar(30),
+LastName nvarchar(30)
+);
+
+declare @i int = 0
+while @i < 600000
+begin
+	set @i=@i+1
+	insert into users (Name, LastName) values (concat('vardas', @i),concat('pavarde',@i))
+end
+
+select * from users
+select COUNT(*) from users
+
+select [Name] from users 
+where [Name] = 'vardas28'
+
+create nonclustered index IX_users_NameLastName
+on users ([Name])
