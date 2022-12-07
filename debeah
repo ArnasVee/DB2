@@ -1,0 +1,117 @@
+CREATE DATABASE SANDBOX20221207
+USE SANDBOX20221207
+
+CREATE TABLE Vartotojai (
+[Id] int identity (1,1) primary key,
+[Vardas] nvarchar(20) not null,
+[Pavarde] nvarchar(20) not null
+);
+
+CREATE TABLE Saskaitos (
+[Id] int identity  (1,1) primary key,
+[Likutis] smallint not null,
+[SaskaitosNr] nvarchar(20) not null,
+[Vartotojasfk] int foreign key references Vartotojai(Id)
+);
+
+ALTER TABLE Saskaitos
+ALTER COLUMN Vartotojasfk int NOT NULL;
+
+INSERT INTO Vartotojai(Vardas, Pavarde)
+Values ('Vardenis', 'Pavardenis'),
+        ('Kazkoks', 'Anoks')
+
+INSERT INTO Saskaitos(SaskaitosNr, Likutis, Vartotojasfk )
+Values ('LT88888822', '2500', 1),
+        ('LT6666666', '2500', 2)
+
+UPDATE Saskaitos
+SET Vartotojasfk = 2
+WHERE Id = 2;
+
+select * from Saskaitos
+select * from Vartotojai
+
+DELETE FROM Vartotojai WHERE Id=4;
+
+UPDATE Saskaitos
+set Likutis = Likutis+1500 where Id=5
+
+UPDATE Saskaitos
+set Likutis = Likutis-1500 where Id=5
+
+
+
+Begin transaction
+begin try
+update Saskaitos
+set Likutis=Likutis+1500 where Id=4;
+update Saskaitos
+set Likutis=Likutis-1500 where Id=5;
+commit
+end try
+begin catch
+rollback
+end catch
+
+--------------------------------
+alter table vartotojai
+add [ElPastas] nvarchar(120);
+
+Alter table vartotojai
+alter column Vardas nvarchar(60) not null; 
+Alter table vartotojai
+alter column Pavarde nvarchar(120) not null; 
+
+DECLARE @i INT = 0
+
+DECLARE @randomName NVARCHAR(60)
+
+DECLARE @randomLastname NVARCHAR(60)
+
+DECLARE @randomEmail NVARCHAR(120) 
+
+WHILE @i < 100000000 
+
+BEGIN
+
+    SET @i = @i + 1 
+
+SET @randomName = CONCAT(LEFT(NEWID(), 8), '_VARDAS', @i)
+
+SET @randomLastname = CONCAT(LEFT(NEWID(), 8),'_PAVARDE', @i)
+
+SET @randomEmail = CONCAT(@randomName, '.', @randomLastname, '@gmail.com') 
+
+    INSERT INTO Vartotojai (Vardas, Pavarde, ElPastas) VALUES (@randomName, @randomLastname, @randomEmail)
+
+END
+
+select * from Vartotojai where Id=2361426;
+
+----name 4C209F48_VARDAS2361420
+
+select * from Vartotojai where vardas='4C209F48_VARDAS2361420' and Pavarde='F82889D1_PAVARDE2361420'
+
+---uztruko 538 milisekundes
+
+create nonclustered index IX_Vartotojai_VardasPavarde
+on vartotojai (Vardas, Pavarde)
+ 
+--su cluster indexu uztruko 0 mlsekundziu
+
+
+
+---joininimai:
+
+select * from Saskaitos
+SELECT * from Vartotojai where Id=1
+SELECT * from Saskaitos where Id=1
+
+SELECT *
+FROM Vartotojai
+RIGHT JOIN Saskaitos ON Saskaitos.Vartotojasfk=Vartotojai.Id;
+
+SELECT *
+FROM Vartotojai
+LEFT JOIN Saskaitos ON Saskaitos.Vartotojasfk=Vartotojai.Id;
