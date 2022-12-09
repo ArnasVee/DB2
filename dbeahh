@@ -1,0 +1,35 @@
+--3. Dalykinė sritis: Turime daug nekilnojamo turto vienetų, kuriuos aptarnauja įvairios įmonės (išveža --šiukšles, tvarko aplinką, tiekia elektrą ir t.t). Reikia duomenų bazėje sukurti saugojimo struktūrą, --kurioje būtų saugoma dalykinės srities informacija:​
+
+--Nekilnojamo turto: NT kodas, pirkimo kaina, registravimo data ir laikas;​
+
+--NT aptarnaujančios įmonės: įmonės kodas, įmonės pavadinimas, paslaugos pavadinimas;​
+
+create table NT(
+ntId int identity(1,1) primary key,
+pirkimoKaina numeric (10,4) not null,
+registravimoData datetime default GETDATE()
+);
+create table aptarnaujanciosImones(
+apId int identity(1,1) primary key,
+imonesPavadinimas nvarchar(30) not null,
+paslaugosPavadinimas nvarchar(30) not null
+);
+create table ntAptarnaujanciosImones(
+ntFk int foreign key references NT(ntId) not null,
+apFk int foreign key references aptarnaujanciosImones(apId) not null
+);
+select * from NT
+select * from aptarnaujanciosImones
+select * from ntAptarnaujanciosImones
+
+insert into nt (pirkimoKaina)
+values (10000),(30000),(40000),(50000),(60000),(70000)
+
+insert into aptarnaujanciosImones(imonesPavadinimas,paslaugosPavadinimas)
+values ('Kauno Svara','Valymas'),('Kauno Vandenys','Vanduo'),('Kauno Elektra','Elektra'),('Kauno Siluma','Sildymas')
+
+insert into ntAptarnaujanciosImones(ntFk, apFk)
+values (1,3), (2,2),(2,4),(3,1),(3,3),(3,4),(4,4)
+
+select * from NT left join ntAptarnaujanciosImones on ntId=ntFk
+left join aptarnaujanciosImones on apId=apFk;
